@@ -30,19 +30,28 @@ public class Main {
             addDestNode.adjacentNodes.put(addSourceNode, weight);
         } else {
             for (Node findDestination: nodes) {
+                System.out.println("for - findDestination" + source);
                 if (findDestination.label == destination) {
                     for (Node findSource: nodes) {
+                        System.out.println("for - findSource" + source);
                         if (findSource.label == source) {
+                            System.out.println("foundDesti foundSource" + source);
                             findDestination.adjacentNodes.put(findSource, weight);
                             findSource.adjacentNodes.put(findDestination, weight);
                         } else {
+                            System.out.println("foundDesti noSource" + source);
                             Node addSourceNode = new Node(source);
                             addSourceNode.adjacentNodes.put(findDestination, weight);
                             findDestination.adjacentNodes.put(addSourceNode, weight);
                             nodes.add(addSourceNode);
                             System.out.println(nodes.size());
                         }
+
                     }
+                    System.out.println("hallo");
+                }else{
+                    System.out.println("done nothing" +source);
+
                 }
             }
         }
@@ -51,10 +60,10 @@ public class Main {
         Main first = new Main();
 
         first.addNode("0", "1", 5);
-      /*  first.addNode("5", "1", 4);*/
+        first.addNode("5", "1", 4);
 
         System.out.println(first.nodes.size());
-       /* first.addNode("0", "7", 4);*/
+        //first.addNode("0", "7", 4);
 
 
     }
