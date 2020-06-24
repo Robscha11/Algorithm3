@@ -48,6 +48,7 @@ public class Main {
                         }
 
                     }
+					nodes.add(addSourceNode);
                     System.out.println("hallo");
                 }else{
                     System.out.println("done nothing" +source);
