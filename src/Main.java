@@ -16,16 +16,26 @@ public class Main {
     Main(){
         nodes = new ArrayList<Node>();
         minPriorityQueue = new MinHeapTemplate();
-        /*parent = null;
-        distance = Integer.MAX_VALUE;*/
+        Node parent = null;
+        int distance = Integer.MAX_VALUE;
         isDirected = true;
     }
 
     public int primMethod (Node startNode) {
-        int distance = 0;
-        int min = 0;
-        int bigger = 0;
+        int sum = 0;
         ArrayList<Node> visited = new ArrayList<>();
+        Node currentNode = startNode;
+        currentNode.parent = startNode;
+        sum = Collections.min(startNode.adjacentNodes.values());
+        currentNode = currentNode.adjacentNodes.;
+        if (currentNode.adjacentNodes != null && visited.contains(currentNode.adjacentNodes)) {
+            currentNode.distance = Collections.min(startNode.adjacentNodes.values());
+        } else {
+            currentNode = currentNode.parent;
+        } if (visited.contains(currentNode)){
+
+        }
+
         visited.add(startNode);
 
         for (Node focusNode: visited) {
@@ -37,6 +47,17 @@ public class Main {
         return distance;
     }
 
+    public void addJumpRemove (Node currentNode) {
+        int sum = 0;
+        ArrayList<Node> visited = new ArrayList<>();
+        visited.add(currentNode);
+        sum += currentNode.distance;
+        currentNode.removeConnection(nextNode);
+        nextNode.removeConnection(currentNode);
+        currentNode = nextNode;
+
+    }
+
     public void addNode(String source, String destination, int weight) {
         if (nodes.isEmpty()) {
             Node addSourceNode = new Node(source);
@@ -45,6 +66,7 @@ public class Main {
             nodes.add(addDestNode);
             addSourceNode.adjacentNodes.put(addDestNode, weight);
             addDestNode.adjacentNodes.put(addSourceNode, weight);
+            //already nodes in list
         } else {
                 if (containingNodes(nodes, source).label == source && containingNodes(nodes, destination).label == destination) {
                     Node savedNode = containingNodes(nodes, destination);
