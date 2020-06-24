@@ -1,5 +1,6 @@
 import java.time.chrono.MinguoEra;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 // YOU CAN USE ONLY THE ArrayLists AND HashMaps FOR THIS ASSIGNMENT!
@@ -20,6 +21,22 @@ public class Main {
         isDirected = true;
     }
 
+    public int primMethod (Node startNode) {
+        int distance = 0;
+        int min = 0;
+        int bigger = 0;
+        ArrayList<Node> visited = new ArrayList<>();
+        visited.add(startNode);
+
+        for (Node focusNode: visited) {
+            bigger = visited.get(0).distance;
+            min = Collections.min(focusNode.adjacentNodes.values());
+            if ()
+        }
+
+        return distance;
+    }
+
     public void addNode(String source, String destination, int weight) {
         if (nodes.isEmpty()) {
             Node addSourceNode = new Node(source);
@@ -29,39 +46,84 @@ public class Main {
             addSourceNode.adjacentNodes.put(addDestNode, weight);
             addDestNode.adjacentNodes.put(addSourceNode, weight);
         } else {
-            for (Node findDestination: nodes) {
-                System.out.println("for - findDestination" + source);
-                if (findDestination.label == destination) {
-                    for (Node findSource: nodes) {
-                        System.out.println("for - findSource" + source);
-                        if (findSource.label == source) {
-                            System.out.println("foundDesti foundSource" + source);
-                            findDestination.adjacentNodes.put(findSource, weight);
-                            findSource.adjacentNodes.put(findDestination, weight);
-                        } else { }
-                    }
-                    System.out.println("foundDesti noSource" + source);
+                if (containingNodes(nodes, source).label == source && containingNodes(nodes, destination).label == destination) {
+                    Node savedNode = containingNodes(nodes, destination);
+                    containingNodes(nodes, source).adjacentNodes.put(savedNode, weight);
+                    savedNode.adjacentNodes.put(containingNodes(nodes, source), weight);
+                } else if (containingNodes(nodes, source).label == source && containingNodes2(nodes, destination)) {
+                    //do nothing
+                } else if (containingNodes2(nodes, source) && containingNodes(nodes, destination).label == destination){
+                    Node savedNode = containingNodes(nodes, destination);
                     Node addSourceNode = new Node(source);
-                    addSourceNode.adjacentNodes.put(findDestination, weight);
-                    findDestination.adjacentNodes.put(addSourceNode, weight);
                     nodes.add(addSourceNode);
-                    System.out.println(nodes.size());
-                    System.out.println("hallo");
-                    break;
-                }else{
-                    System.out.println("done nothing" +source);
-
+                    addSourceNode.adjacentNodes.put(savedNode, weight);
+                    savedNode.adjacentNodes.put(addSourceNode, weight);
+                } else {
+                    //do nothing
                 }
             }
         }
+
+    public Node containingNodes(ArrayList<Node> allNodes, String search) {
+        for (int i = 0; i<allNodes.size(); i++) {
+            if (allNodes.get(i).label == search) {
+                return allNodes.get(i);
+            }
+        }
+        return allNodes.get(0);
     }
+
+    public Boolean containingNodes2(ArrayList<Node> allNodes, String search) {
+        for (int i = 0; i<allNodes.size(); i++) {
+            if (allNodes.get(i).label == search) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void removeNode (String toRemove) {
+        int ourLook = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            if (nodes.get(i).label == toRemove) {
+                ourLook = i;
+            }
+
+        }
+        for (int i = 0; i < nodes.size(); i++) {
+            nodes.get(i).adjacentNodes.remove(nodes.get(ourLook));
+            if (nodes.get(i).adjacentNodes.isEmpty()) {
+                nodes.remove(i);
+            }
+        }
+        nodes.remove(ourLook);
+    }
+
+    public void printGraph () {
+
+    }
+
     public static void main(String[] args) {
         Main first = new Main();
 
         first.addNode("0", "1", 5);
         first.addNode("5", "1", 4);
-        first.addNode("9", "1", 4);
-        System.out.println(first.nodes.size());
+        first.addNode("9", "3", 4);
+        first.addNode("8", "1", 5);
+        first.addNode("6", "0", 4);
+        first.addNode("0", "0", 4);
+        for (int i = 0; i < first.nodes.size(); i++) {
+            System.out.println(first.nodes.get(i).label);
+        }
+        System.out.println("_______________________");
+        first.removeNode("1");
+        System.out.println("_______________________");
+        for (int i = 0; i < first.nodes.size(); i++) {
+            System.out.println(first.nodes.get(i).label);
+        }
+
+        System.out.println(first.nodes.get(1).adjacentNodes.keySet());
+
 
 
 
@@ -104,9 +166,21 @@ class Node {
         adjacentNodes = new HashMap<Node, Integer>();
     }
 
-    // TODO: implement additional constructors
-    // TODO: implement method for adding a connection
-    // TODO: implement method for removing a connection
+    public void removeConnection (Node connectedNode) {
+        connectedNode.adjacentNodes.remove(this);
+        this.adjacentNodes.remove(connectedNode);
+    }
+
+    public void addingConnection (Node connectedNode, int distance) {
+        connectedNode.adjacentNodes.put(this, this.distance);
+        this.adjacentNodes.put(connectedNode, distance);
+    }
+
+
+
+    //implement additional constructors
+    //implement method for adding a connection
+    //implement method for removing a connection
     // TODO: implement methods for manipulating the parent and distance
 
 }
