@@ -1,7 +1,4 @@
-import java.time.chrono.MinguoEra;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 // YOU CAN USE ONLY THE ArrayLists AND HashMaps FOR THIS ASSIGNMENT!
 
@@ -21,42 +18,63 @@ public class Main {
         isDirected = true;
     }
 
+    public void bellmannFordMethod () {
+        nodes.get(0).distance = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            System.out.println(nodes.get(i).adjacentNodes.keySet());
+            for(Node key : nodes.get(i).adjacentNodes.keySet()) {
+                System.out.println(nodes.get(i).adjacentNodes.get(key));
+                if (key.distance > nodes.get(i).distance + nodes.get(i).adjacentNodes.get(key)) {
+                    System.out.println(nodes.get(i).adjacentNodes.get(key));
+                    key.distance = nodes.get(i).distance + nodes.get(i).adjacentNodes.get(key);
+                }
+            }
+        }
+        System.out.println();
+        for (Node eachNode: nodes) {
+            System.out.println("Distance of " + nodes.get(0).label + " to " + eachNode.label + ": " + eachNode.distance);
+        }
+    }
+
+
     public int primMethod (Node startNode) {
-        int sum = 0;
-        ArrayList<Node> visited = new ArrayList<>();
-        Node currentNode = startNode;
-        currentNode.parent = startNode;
-        sum = Collections.min(startNode.adjacentNodes.values());
-        currentNode = currentNode.adjacentNodes.;
-        if (currentNode.adjacentNodes != null && visited.contains(currentNode.adjacentNodes)) {
-            currentNode.distance = Collections.min(startNode.adjacentNodes.values());
-        } else {
-            currentNode = currentNode.parent;
-        } if (visited.contains(currentNode)){
-
+        if (!nodes.contains(startNode)) {
+            return 0;
         }
-
+        int sum = 0;
+        int value = Integer.MAX_VALUE;
+        Node savedNode = null;
+        Node nextNode;
+        ArrayList<Node> visited = new ArrayList<>();
         visited.add(startNode);
-
-        for (Node focusNode: visited) {
-            bigger = visited.get(0).distance;
-            min = Collections.min(focusNode.adjacentNodes.values());
-            if ()
+        while (visited.size() < nodes.size()) {
+            for (Node focusNode: visited) {
+                System.out.println("Label: " + focusNode.label);
+                if (!focusNode.adjacentNodes.isEmpty() && value > Collections.min(focusNode.adjacentNodes.values())) {
+                    if (!visited.contains(getKeyByValue(focusNode.adjacentNodes, Collections.min(focusNode.adjacentNodes.values())))) {
+                        value = Collections.min(focusNode.adjacentNodes.values());
+                        savedNode = focusNode;
+                    }
+                }
+            }
+            nextNode = getKeyByValue(savedNode.adjacentNodes, value);
+            sum += value;
+            visited.add(nextNode);
+            savedNode.removeConnection(nextNode);
+            value = Integer.MAX_VALUE;
         }
-
-        return distance;
+        return sum;
     }
 
-    public void addJumpRemove (Node currentNode) {
-        int sum = 0;
-        ArrayList<Node> visited = new ArrayList<>();
-        visited.add(currentNode);
-        sum += currentNode.distance;
-        currentNode.removeConnection(nextNode);
-        nextNode.removeConnection(currentNode);
-        currentNode = nextNode;
-
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
+
 
     public void addNode(String source, String destination, int weight) {
         if (nodes.isEmpty()) {
@@ -128,23 +146,27 @@ public class Main {
     public static void main(String[] args) {
         Main first = new Main();
 
-        first.addNode("0", "1", 5);
+        first.addNode("0", "1", 2);
         first.addNode("5", "1", 4);
-        first.addNode("9", "3", 4);
-        first.addNode("8", "1", 5);
-        first.addNode("6", "0", 4);
-        first.addNode("0", "0", 4);
+        first.addNode("9", "3", 8);
+        first.addNode("8", "1", 6);
+        first.addNode("6", "0", 14);
         for (int i = 0; i < first.nodes.size(); i++) {
             System.out.println(first.nodes.get(i).label);
         }
         System.out.println("_______________________");
-        first.removeNode("1");
+        //first.removeNode("1");
         System.out.println("_______________________");
         for (int i = 0; i < first.nodes.size(); i++) {
             System.out.println(first.nodes.get(i).label);
         }
 
-        System.out.println(first.nodes.get(1).adjacentNodes.keySet());
+        System.out.println(first.primMethod(first.nodes.get(0)));
+
+        first.bellmannFordMethod();
+
+
+        //System.out.println(first.nodes.get(1).adjacentNodes.keySet());
 
 
 
