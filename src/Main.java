@@ -12,6 +12,8 @@ public class Main {
     ArrayList<Node> nodes;
     MinHeapTemplate minPriorityQueue;
     boolean isDirected;
+    ArrayList<String> allElements = new ArrayList<>();
+
 
     Main(){
         nodes = new ArrayList<Node>();
@@ -24,7 +26,7 @@ public class Main {
     //gets String and writes into .gv file
     public void saveQV (String qv){
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("tree.gv"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("graph.gv"));
             writer.write("digraph{\n");
             writer.write(qv);
             writer.write("}");
@@ -34,19 +36,25 @@ public class Main {
         }
     }
 
+
     public void bellmannFordMethod () {
+        for (Node test: nodes) {
+            test.distance = Integer.MAX_VALUE;
+        }
         nodes.get(0).distance = 0;
+
         for (int i = 0; i < nodes.size(); i++) {
-            System.out.println(nodes.get(i).adjacentNodes.keySet());
+            //System.out.println(nodes.get(i).adjacentNodes.keySet());
             for(Node key : nodes.get(i).adjacentNodes.keySet()) {
                 System.out.println(nodes.get(i).adjacentNodes.get(key));
+                System.out.println(nodes.get(i).distance);
+                System.out.println(key.distance);
                 if (key.distance > nodes.get(i).distance + nodes.get(i).adjacentNodes.get(key)) {
                     System.out.println(nodes.get(i).adjacentNodes.get(key));
                     key.distance = nodes.get(i).distance + nodes.get(i).adjacentNodes.get(key);
                 }
             }
         }
-        System.out.println();
         for (Node eachNode: nodes) {
             System.out.println("Distance of " + nodes.get(0).label + " to " + eachNode.label + ": " + eachNode.distance);
         }
@@ -93,10 +101,13 @@ public class Main {
 
 
     public void addNode(String source, String destination, int weight) {
+
         if (nodes.isEmpty()) {
             Node addSourceNode = new Node(source);
+            allElements.add(source + "->" + destination + "[label =" + weight + "];");
             nodes.add(addSourceNode);
             Node addDestNode = new Node(destination);
+            allElements.add(destination + "->" + source + "[label =" + weight + "];");
             nodes.add(addDestNode);
             addSourceNode.adjacentNodes.put(addDestNode, weight);
             addDestNode.adjacentNodes.put(addSourceNode, weight);
@@ -111,6 +122,8 @@ public class Main {
                 } else if (containingNodes2(nodes, source) && containingNodes(nodes, destination).label == destination){
                     Node savedNode = containingNodes(nodes, destination);
                     Node addSourceNode = new Node(source);
+                    allElements.add(source + "->" + destination + "[label =" + weight + "];");
+                    allElements.add(destination + "->" + source + "[label =" + weight + "];");
                     nodes.add(addSourceNode);
                     addSourceNode.adjacentNodes.put(savedNode, weight);
                     savedNode.adjacentNodes.put(addSourceNode, weight);
@@ -150,13 +163,11 @@ public class Main {
             nodes.get(i).adjacentNodes.remove(nodes.get(ourLook));
             if (nodes.get(i).adjacentNodes.isEmpty()) {
                 nodes.remove(i);
+                allElements.remove(i);
             }
         }
         nodes.remove(ourLook);
-    }
-
-    public void printGraph () {
-
+        allElements.remove(ourLook);
     }
 
     public static void main(String[] args) {
@@ -171,17 +182,25 @@ public class Main {
             System.out.println(first.nodes.get(i).label);
         }
         System.out.println("_______________________");
-        //first.removeNode("1");
+        first.removeNode("3");
         System.out.println("_______________________");
         for (int i = 0; i < first.nodes.size(); i++) {
             System.out.println(first.nodes.get(i).label);
         }
 
-        System.out.println(first.primMethod(first.nodes.get(0)));
+        String allElements ="";
+        for (String createGraph: first.allElements) {
+            allElements += createGraph + "\n";
+        }
+        first.saveQV(allElements);
+
+        //System.out.println(first.primMethod(first.nodes.get(0)));
+
+        System.out.println("__________Bellmann__________");
 
         first.bellmannFordMethod();
 
-
+        System.out.println("_______________________");
         //System.out.println(first.nodes.get(1).adjacentNodes.keySet());
 
 
