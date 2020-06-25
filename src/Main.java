@@ -14,7 +14,6 @@ public class Main {
     boolean isDirected;
     ArrayList<String> allElements = new ArrayList<>();
 
-
     Main(){
         nodes = new ArrayList<Node>();
         minPriorityQueue = new MinHeapTemplate();
@@ -80,6 +79,9 @@ public class Main {
                 }
             }
             nextNode = getKeyByValue(savedNode.adjacentNodes, value);
+            allElements.add(savedNode.label + "->" + nextNode.label + "[color=\"0.650 0.700 0.700\"]");
+            //idea adding each highlighted line at this point only unsure how
+            //savedNode -> nextNode [color="0.650 0.700 0.700"]
             sum += value;
             visited.add(nextNode);
             savedNode.removeConnection(nextNode);
@@ -100,7 +102,6 @@ public class Main {
 
     //adding nodes with existing destination to our tree structure
     public void addNode(String source, String destination, int weight) {
-
         if (nodes.isEmpty()) {
             Node addSourceNode = new Node(source);
             allElements.add(source + "->" + destination + "[label =" + weight + "]");
@@ -183,42 +184,21 @@ public class Main {
         first.addNode("8", "1", 6);
         first.addNode("6", "0", 14);
 
-        String allElements = "";
-        for (String createGraph: first.allElements) {
-            allElements += createGraph + "\n";
-        }
-        first.saveQV(allElements);
-
         System.out.println("__________Bellmann__________");
         first.bellmannFordMethod();
         System.out.println("____________________________\n\n");
-
 
         System.out.println("____________Prim____________");
         System.out.println("Sum minimum spanning tree: " + first.primMethod(first.nodes.get(0)));
         System.out.println("____________________________");
 
+        String allElements = "";
+        for (String createGraph: first.allElements) {
+            allElements += createGraph + "\n";
+        }
 
-
-
+        first.saveQV(allElements);
     }
-
-    /*TODO: implement additional constructors
-    TODO: implement method for adding a node
-    TODO: implement method for removing a node
-    TODO: implement Prim
-    Represent a directed weighted graph and implement the Prim algorithm for com-
-    puting the Minimum Spanning Tree of a graph. (30%)
-    TODO: implement Bellman-Ford
-    Represent a directed weighted graph and implement the Bellman-Ford algorithm
-    for computing the Single-Source Shortest Path of a graph. (30%)
-    TODO: implement printGraph function that generates a file written using the dot format
-    Implement a printGraph function that prints a Graph using the dot format nota-
-    tion, highlighting also the edges that are part of a Minimum Spanning Tree or a
-    Shortest Path. (10%)
-
-    write main using both algorithms with input values*/
-
 }
 
 /**
@@ -230,12 +210,6 @@ class Node {
     Node parent;
     int distance; //aka key
 
-/*    Node(){
-        label = "";
-        adjacentNodes = new HashMap<Node,Integer>();
-    }*/
-
-    //adding a constructor who takes string as input parameter
     Node(String name){
         label = name;
         adjacentNodes = new HashMap<Node, Integer>();
@@ -252,14 +226,6 @@ class Node {
         connectedNode.adjacentNodes.put(this, this.distance);
         this.adjacentNodes.put(connectedNode, distance);
     }
-
-
-
-    //implement additional constructors
-    //implement method for adding a connection
-    //implement method for removing a connection
-    // TODO: implement methods for manipulating the parent and distance
-
 }
 
 /**
@@ -271,8 +237,6 @@ class MinHeapTemplate{
     MinHeapTemplate(){
         root = null;
     }
-    // TODO: implement method for restructuring the min-priority Queue
-    // TODO: implement method for extracting the smaller element from the min-priority Queue
 }
 
 /**
@@ -290,8 +254,6 @@ class MinHeapNode{
         left = null;
         right = null;
     }
-
-    // TODO: implement additional constructors
 }
 
 
