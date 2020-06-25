@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 // YOU CAN USE ONLY THE ArrayLists AND HashMaps FOR THIS ASSIGNMENT!
@@ -16,6 +19,19 @@ public class Main {
         Node parent = null;
         int distance = Integer.MAX_VALUE;
         isDirected = true;
+    }
+
+    //gets String and writes into .gv file
+    public void saveQV (String qv){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("tree.gv"));
+            writer.write("digraph{\n");
+            writer.write(qv);
+            writer.write("}");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void bellmannFordMethod () {
